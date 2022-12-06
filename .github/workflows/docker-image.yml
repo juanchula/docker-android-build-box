@@ -114,6 +114,7 @@ jobs:
         platforms: linux/amd64
         # platforms: linux/arm64
         # push: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
-        push: ${{ github.event_name != 'pull_request' && (github.ref == 'refs/heads/master' || contains(github.ref, 'refs/tags/')) }}
-        tags: ${{ secrets.DOCKER_USERNAME }}/android-build-box:${{ github.sha }}
+        # push: ${{ github.event_name != 'pull_request' && (github.ref == 'refs/heads/master' || contains(github.ref, 'refs/tags/')) }}
+        push: true
+        tags: fernandezjuan/android-build-box:${{ github.sha }}
         labels: ${{ steps.meta.outputs.labels }}
