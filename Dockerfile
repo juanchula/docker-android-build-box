@@ -18,8 +18,8 @@ ENV TZ=America/Los_Angeles
 # Get the latest version from https://developer.android.com/studio/index.html
 ENV ANDROID_SDK_TOOLS_VERSION="4333796"
 
-# nodejs version
-ENV NODE_VERSION="14.x"
+# # nodejs version
+# ENV NODE_VERSION="14.x"
 
 # Set locale
 ENV LANG="en_US.UTF-8" \
@@ -86,32 +86,32 @@ RUN apt-get update -qq > /dev/null && \
     java -version && \
     echo "set timezone" && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
-    echo "nodejs, npm, cordova, ionic, react-native" && \
-    curl -sL -k https://deb.nodesource.com/setup_${NODE_VERSION} \
-        | bash - > /dev/null && \
-    apt-get install -qq nodejs > /dev/null && \
-    apt-get clean > /dev/null && \
-    curl -sS -k https://dl.yarnpkg.com/debian/pubkey.gpg \
-        | apt-key add - > /dev/null && \
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" \
-        | tee /etc/apt/sources.list.d/yarn.list > /dev/null && \
-    apt-get update -qq > /dev/null && \
-    apt-get install -qq yarn > /dev/null && \
-    rm -rf /var/lib/apt/lists/ && \
-    npm install --quiet -g npm > /dev/null && \
-    npm install --quiet -g \
-        bower \
-        cordova \
-        eslint \
-        gulp \
-        ionic \
-        jshint \
-        karma-cli \
-        mocha \
-        node-gyp \
-        npm-check-updates \
-        react-native-cli > /dev/null && \
-    npm cache clean --force > /dev/null && \
+    # echo "nodejs, npm, cordova, ionic, react-native" && \
+    # curl -sL -k https://deb.nodesource.com/setup_${NODE_VERSION} \
+    #     | bash - > /dev/null && \
+    # apt-get install -qq nodejs > /dev/null && \
+    # apt-get clean > /dev/null && \
+    # curl -sS -k https://dl.yarnpkg.com/debian/pubkey.gpg \
+    #     | apt-key add - > /dev/null && \
+    # echo "deb https://dl.yarnpkg.com/debian/ stable main" \
+    #     | tee /etc/apt/sources.list.d/yarn.list > /dev/null && \
+    # apt-get update -qq > /dev/null && \
+    # apt-get install -qq yarn > /dev/null && \
+    # rm -rf /var/lib/apt/lists/ && \
+    # npm install --quiet -g npm > /dev/null && \
+    # npm install --quiet -g \
+    #     bower \
+    #     cordova \
+    #     eslint \
+    #     gulp \
+    #     ionic \
+    #     jshint \
+    #     karma-cli \
+    #     mocha \
+    #     node-gyp \
+    #     npm-check-updates \
+    #     react-native-cli > /dev/null && \
+    # npm cache clean --force > /dev/null && \
     rm -rf /tmp/* /var/tmp/*
 
 # Install Android SDK
@@ -143,6 +143,7 @@ RUN . /etc/jdk.env && \
 RUN echo "platforms" && \
     . /etc/jdk.env && \
     yes | "$ANDROID_HOME"/tools/bin/sdkmanager \
+        "platforms;android-33" \
         "platforms;android-32" \
         "platforms;android-31" \
         "platforms;android-30" \
@@ -156,9 +157,10 @@ RUN echo "platform tools" && \
     yes | "$ANDROID_HOME"/tools/bin/sdkmanager \
         "platform-tools" > /dev/null
 
-RUN echo "build tools 26-30" && \
+RUN echo "build tools 26-32" && \
     . /etc/jdk.env && \
     yes | "$ANDROID_HOME"/tools/bin/sdkmanager \
+        "build-tools;32.0.0" \
         "build-tools;31.0.0" \
         "build-tools;30.0.0" "build-tools;30.0.2" "build-tools;30.0.3" \
         "build-tools;29.0.3" "build-tools;29.0.2" \
@@ -196,14 +198,14 @@ RUN ls -l $ANDROID_HOME && \
 
 RUN du -sh $ANDROID_HOME
 
-RUN echo "Flutter sdk" && \
-    if [ "$(uname -m)" != "x86_64" ]; then echo "Flutter only support Linux x86 64bit. skip for $(uname -m)"; exit 0; fi && \
-    cd /opt && \
-    wget --quiet https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.0.4-stable.tar.xz -O flutter.tar.xz && \
-    tar xf flutter.tar.xz && \
-    git config --global --add safe.directory $FLUTTER_HOME && \
-    flutter config --no-analytics && \
-    rm -f flutter.tar.xz
+# RUN echo "Flutter sdk" && \
+#     if [ "$(uname -m)" != "x86_64" ]; then echo "Flutter only support Linux x86 64bit. skip for $(uname -m)"; exit 0; fi && \
+#     cd /opt && \
+#     wget --quiet https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.0.4-stable.tar.xz -O flutter.tar.xz && \
+#     tar xf flutter.tar.xz && \
+#     git config --global --add safe.directory $FLUTTER_HOME && \
+#     flutter config --no-analytics && \
+#     rm -f flutter.tar.xz
 
 # Copy sdk license agreement files.
 RUN mkdir -p $ANDROID_HOME/licenses

@@ -135,5 +135,5 @@ jobs:
         # platforms: linux/arm64
         # push: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
         push: ${{ github.event_name != 'pull_request' && (github.ref == 'refs/heads/master' || contains(github.ref, 'refs/tags/')) }}
-        tags: mingc/android-build-box:latest,${{ steps.meta.outputs.tags }}
+        tags: ${{ secrets.DOCKER_USERNAME }}/android-build-box:latest,${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
